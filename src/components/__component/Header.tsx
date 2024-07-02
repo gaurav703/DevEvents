@@ -23,7 +23,7 @@ const NavItems = () => {
     },
     {
       label: "Create Event",
-      route: "/events/create",
+      route: "/events/CreateEvents",
     },
     {
       label: "My Profile",
@@ -66,7 +66,7 @@ const MobileNav = () => {
         </SheetTrigger>
         <SheetContent className="flex flex-col gap-6 bg-white md:hidden">
           <Link href="/" className="text-2xl font-bold text-gray-900">
-            DevMeets
+            DevEvents
           </Link>
           <Separator className="border border-gray-50" />
           <NavItems />
@@ -81,7 +81,7 @@ const Header = () => {
     <footer className="border-b">
       <div className="flex-center wrapper flex-between flex flex-col max-md:flex-row gap-4 p-5 text-center sm:flex-row">
         <Link href="/" className="text-2xl font-bold text-gray-900">
-          DevMeets
+          DevEvents
         </Link>
 
         <nav className="hidden md:flex">

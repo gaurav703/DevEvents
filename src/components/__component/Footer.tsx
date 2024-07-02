@@ -6,10 +6,10 @@ const Footer = () => {
     <footer className="border-t">
       <div className="flex-center wrapper flex-between flex flex-col gap-4 p-5 text-center sm:flex-row">
         <Link href="/" className="text-2xl font-bold text-gray-900">
-          DevMeets
+          DevEvents
         </Link>
 
-        <p>2024 DevMeets. All Rights reserved.</p>
+        <p>2024 DevEvents. All Rights reserved.</p>
       </div>
     </footer>
   );
