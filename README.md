@@ -7,8 +7,7 @@
 <body>
     <h1>DevMeets</h1>
     <p>DevMeets is a web application built with Next.js, Tailwind CSS, and Node.js for organizing and managing tech-related events. It allows users to host, discover, and attend events within the tech community.</p>
-
-    <div class="features">
+ <div class="features">
         <h2>Features</h2>
         <ul>
             <li>Event Management: Create, update, and delete events.</li>
@@ -17,8 +16,7 @@
             <li>Registration and Payment: Register for events and handle payments securely using Stripe integration.</li>
         </ul>
     </div>
-
-    <div class="technologies">
+ <div class="technologies">
         <h2>Technologies Used</h2>
         <h3>Frontend:</h3>
         <ul>
@@ -30,7 +28,7 @@
             <li>React-Datepicker</li>
         </ul>
 
-        <h3>Backend:</h3>
+  <h3>Backend:</h3>
         <ul>
             <li>Node.js</li>
             <li>Express.js</li>
