@@ -1,6 +1,19 @@
 import Link from "next/link";
 import React from "react";
 import Image from "next/image";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { useTransition } from "react";
+import { usePathname } from "next/navigation";
 
 type EventProp = {
   data: any;
@@ -63,6 +76,8 @@ const EventList = ({
   console.log(data);
   console.log(data.length);
   const isEventCreator = true;
+  let [isPending, startTransition] = useTransition();
+
   return (
     <>
       {data.length > 0 ? (
@@ -104,6 +119,35 @@ const EventList = ({
                         </Link>
 
                         {/* <DeleteConfirmation eventId={event._id} /> */}
+                        <AlertDialog>
+                          <AlertDialogTrigger>
+                            <Image
+                              src="/assets/icons/delete.svg"
+                              alt="edit"
+                              width={20}
+                              height={20}
+                            />
+                          </AlertDialogTrigger>
+
+                          <AlertDialogContent className="bg-white">
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>
+                                Are you sure you want to delete?
+                              </AlertDialogTitle>
+                              <AlertDialogDescription className="p-regular-16 text-grey-600">
+                                This will permanently delete this event
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>Cancel</AlertDialogCancel>
+
+                              <AlertDialogAction>
+                                {isPending ? "Deleting..." : "Delete"}
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
                       </div>
                     )}
 

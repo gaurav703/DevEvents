@@ -12,8 +12,8 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "DevMeets",
-  description: "DevMeets - Connect, Learn, and Grow with Tech Events",
+  title: "DevEvents",
+  description: "DevEvents - Connect, Learn, and Grow with Tech Events",
 };
 
 export default function RootLayout({
