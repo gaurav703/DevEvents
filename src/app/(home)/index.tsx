@@ -1,11 +1,33 @@
+"use client";
 import React from "react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
 import Search from "@/components/__component/Search";
 import CategoryFilter from "@/components/__component/CategoryFilter";
+import EventList from "./_component/EventList";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 export default function Home() {
+  const [events, setEvents] = useState([]);
+
+  const fetchEvents = async () => {
+    try {
+      const res = await axios.get(
+        "https://devmeets-backend.vercel.app/api/events/"
+      );
+      console.log("resss", res.data);
+      setEvents(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchEvents();
+  }, []);
+
   return (
     <div className="min-h-screen">
       <section className="bg-primary-50 bg-dotted-pattern bg-contain py-5 md:py-10">
@@ -45,15 +67,12 @@ export default function Home() {
           <CategoryFilter />
         </div>
 
-        {/* <Collection
-          data={events?.data}
+        <EventList
+          data={events}
           emptyTitle="No Events Found"
           emptyStateSubtext="Come back later"
           collectionType="All_Events"
-          limit={6}
-          page={page}
-          totalPages={events?.totalPages}
-        /> */}
+        />
       </section>
     </div>
   );
