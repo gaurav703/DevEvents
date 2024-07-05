@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-    <h1>DevMeets</h1>
-    <p>DevMeets is a web application built with Next.js, Tailwind CSS, and Node.js for organizing and managing tech-related events. It allows users to host, discover, and attend events within the tech community.</p>
+    <h1>DevEvents</h1>
+    <p>DevEvents is a web application built with Next.js, Tailwind CSS, and Node.js for organizing and managing tech-related events. It allows users to host, discover, and attend events within the tech community.</p>
  <div class="features">
         <h2>Features</h2>
         <ul>
@@ -24,7 +24,7 @@
             <li>Tailwind CSS</li>
             <li>React Hook Form</li>
             <li>Zod</li>
-            <li>Uploadthing</li>
+            <li>Cloudinary</li>
             <li>React-Datepicker</li>
         </ul>
 
