@@ -4,6 +4,7 @@ import Image from "next/image";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import EventList from "@/app/(home)/_component/EventList";
+import { title } from "process";
 
 const formatDateTime = (dateString: Date) => {
   const dateTimeOptions: Intl.DateTimeFormatOptions = {
@@ -51,7 +52,21 @@ const formatDateTime = (dateString: Date) => {
 };
 
 const EventDetails = ({ params }: { params: { id: string } }) => {
-  const [events, setEvents] = useState([]);
+  interface Event {
+    title: string;
+    isFree: boolean;
+    price: number;
+    category: string;
+    organizer: string;
+    startDateTime: Date;
+    endDateTime: Date;
+    location: string;
+    description: string;
+    url: string;
+  }
+
+  const [events, setEvents] = useState<Event>();
+
   const [relatedevents, setRelatedEvents] = useState([]);
 
   const fetchEvents = async () => {
@@ -144,7 +159,7 @@ const EventDetails = ({ params }: { params: { id: string } }) => {
             </div>
 
             <div className="flex flex-col gap-2">
-              <p className="p-bold-20 text-grey-600">What You'll Learn:</p>
+              <p className="p-bold-20 text-grey-600">What You&apos;ll Learn:</p>
               <p className="p-medium-16 lg:p-regular-18">
                 {events?.description}
               </p>
