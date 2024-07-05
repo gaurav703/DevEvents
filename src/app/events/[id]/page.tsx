@@ -1,10 +1,8 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import axios from "axios";
-import { useEffect, useState } from "react";
 import EventList from "@/app/(home)/_component/EventList";
-import { title } from "process";
 
 const formatDateTime = (dateString: Date) => {
   const dateTimeOptions: Intl.DateTimeFormatOptions = {
@@ -66,7 +64,6 @@ const EventDetails = ({ params }: { params: { id: string } }) => {
   }
 
   const [events, setEvents] = useState<Event>();
-
   const [relatedevents, setRelatedEvents] = useState([]);
 
   const fetchEvents = async () => {
@@ -85,13 +82,12 @@ const EventDetails = ({ params }: { params: { id: string } }) => {
   useEffect(() => {
     fetchEvents();
   }, []);
+
   return (
     <>
-      {" "}
       <section className="flex justify-center bg-primary-50 bg-dotted-pattern bg-contain">
         <div className="grid grid-cols-1 md:grid-cols-2 2xl:max-w-7xl">
           <Image
-            // src={event.imageUrl}
             src="/assets/images/test-2.png"
             alt="hero image"
             width={1000}
@@ -109,21 +105,15 @@ const EventDetails = ({ params }: { params: { id: string } }) => {
                     {events?.isFree ? "FREE" : `$${events?.price}`}
                   </p>
                   <p className="p-medium-16 rounded-full bg-grey-500/10 px-4 py-2.5 text-grey-500">
-                    {/* {events.category.name} */} AI
+                    AI
                   </p>
                 </div>
 
                 <p className="p-medium-18 ml-2 mt-2 sm:mt-0">
-                  by{" "}
-                  <span className="text-primary-500">
-                    {/* {event.organizer.firstName} {event.organizer.lastName} */}
-                    Gaurav Kamble
-                  </span>
+                  by <span className="text-primary-500">Gaurav Kamble</span>
                 </p>
               </div>
             </div>
-
-            {/* <CheckoutButton event={event} /> */}
 
             <div className="flex flex-col gap-5">
               <div className="flex gap-2 md:gap-3">
@@ -134,14 +124,18 @@ const EventDetails = ({ params }: { params: { id: string } }) => {
                   height={32}
                 />
                 <div className="p-medium-16 lg:p-regular-20 flex flex-wrap items-center">
-                  <p>
-                    {formatDateTime(events?.startDateTime).dateOnly} -{" "}
-                    {formatDateTime(events?.startDateTime).timeOnly}
-                  </p>
-                  <p>
-                    {formatDateTime(events?.endDateTime).dateOnly} -{" "}
-                    {formatDateTime(events?.endDateTime).timeOnly}
-                  </p>
+                  {events?.startDateTime && (
+                    <p>
+                      {formatDateTime(events.startDateTime).dateOnly} -{" "}
+                      {formatDateTime(events.startDateTime).timeOnly}
+                    </p>
+                  )}
+                  {events?.endDateTime && (
+                    <p>
+                      {formatDateTime(events.endDateTime).dateOnly} -{" "}
+                      {formatDateTime(events.endDateTime).timeOnly}
+                    </p>
+                  )}
                 </div>
               </div>
 
