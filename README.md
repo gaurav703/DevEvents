@@ -7,6 +7,10 @@
 <body>
     <h1>DevEvents</h1>
     <p>DevEvents is a web application built with Next.js, Tailwind CSS, and Node.js for organizing and managing tech-related events. It allows users to host, discover, and attend events within the tech community.</p>
+    <div>
+        <h2>Backend Reposistory ==</h2> 
+        <p>Github Link : </p> <a>https://github.com/gaurav703/devEvents-backend</a>
+    </div>
  <div class="features">
         <h2>Features</h2>
         <ul>
