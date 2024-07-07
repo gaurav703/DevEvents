@@ -22,6 +22,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { Checkbox } from "../ui/checkbox";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import Dropdown from "./Dropdown";
 
 const formSchema = z.object({
   title: z.string().min(3, "Title must be at least 3 characters"),
@@ -91,42 +92,42 @@ export const EventForm = ({
   // 2. Define a submit handler.
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     // Do something with the form values.
-    // ✅ This will be type-safe and validated.
+    // This will be type-safe and validated.
     console.log("file", imageFile);
     console.log("values", values);
 
-    if (type === "Create") {
-      // create event
-      const formData = new FormData();
-      formData.append("title", values.title);
-      formData.append("description", values.description);
-      formData.append("location", values.location);
-      formData.append("startDateTime", values.startDateTime.toString());
-      formData.append("endDateTime", values.endDateTime.toString());
-      formData.append("categoryId", "60d9fef9f9fd9c34c8dc54aa");
-      formData.append("price", values.price);
-      formData.append("isFree", values.isFree.toString());
-      formData.append("url", values.url);
-      formData.append("organizer", "60d9fef9f9fd9c34c8dc54aa");
-      formData.append("image", imageFile as Blob);
+    // if (type === "Create") {
+    //   // create event
+    //   const formData = new FormData();
+    //   formData.append("title", values.title);
+    //   formData.append("description", values.description);
+    //   formData.append("location", values.location);
+    //   formData.append("startDateTime", values.startDateTime.toString());
+    //   formData.append("endDateTime", values.endDateTime.toString());
+    //   formData.append("categoryId", "60d9fef9f9fd9c34c8dc54aa");
+    //   formData.append("price", values.price);
+    //   formData.append("isFree", values.isFree.toString());
+    //   formData.append("url", values.url);
+    //   formData.append("organizer", "60d9fef9f9fd9c34c8dc54aa");
+    //   formData.append("image", imageFile as Blob);
 
-      try {
-        const response = await axios.post(
-          "https://devmeets-backend.vercel.app/api/events/",
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
-        console.log(response.data);
-        const eventId: any = response.data._id;
-        router.push(`/events/${eventId}`);
-      } catch (error: any) {
-        console.log("error==", error);
-      }
-    }
+    //   try {
+    //     const response = await axios.post(
+    //       "https://devmeets-backend.vercel.app/api/events/",
+    //       formData,
+    //       {
+    //         headers: {
+    //           "Content-Type": "multipart/form-data",
+    //         },
+    //       }
+    //     );
+    //     console.log(response.data);
+    //     const eventId: any = response.data._id;
+    //     router.push(`/events/${eventId}`);
+    //   } catch (error: any) {
+    //     console.log("error==", error);
+    //   }
+    // }
   };
   return (
     <div>
@@ -157,6 +158,26 @@ export const EventForm = ({
               <FormMessage />
             </FormItem>
           </div>
+
+          <div className="flex flex-col gap-5 md:flex-row">
+            <FormField
+              control={form.control}
+              name="categoryId"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormLabel>Event Category</FormLabel>
+                  <FormControl>
+                    <Dropdown
+                      onChangeHandler={field.onChange}
+                      value={field.value}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
           <div className="flex flex-col gap-5 md:flex-row">
             <FormField
               control={form.control}

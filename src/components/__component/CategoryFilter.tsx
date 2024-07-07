@@ -11,6 +11,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const CategoryFilter = () => {
+  
   return (
     <Select>
       <SelectTrigger className="select-field">
