@@ -99,7 +99,7 @@ const EventList = ({
                       className="flex-center flex-grow bg-gray-50 bg-cover bg-center text-grey-500"
                     >
                       <Image
-                        src="/assets/images/test-2.png"
+                        src={event?.imageUrl}
                         height={200}
                         width={400}
                         alt="event"

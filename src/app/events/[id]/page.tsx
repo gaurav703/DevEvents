@@ -48,21 +48,21 @@ const formatDateTime = (dateString: Date) => {
     timeOnly: formattedTime,
   };
 };
+interface Event {
+  title: string;
+  isFree: boolean;
+  price: number;
+  category: string;
+  organizer: string;
+  startDateTime: Date;
+  endDateTime: Date;
+  location: string;
+  description: string;
+  url: string;
+  imageUrl: string;
+}
 
 const EventDetails = ({ params }: { params: { id: string } }) => {
-  interface Event {
-    title: string;
-    isFree: boolean;
-    price: number;
-    category: string;
-    organizer: string;
-    startDateTime: Date;
-    endDateTime: Date;
-    location: string;
-    description: string;
-    url: string;
-  }
-
   const [events, setEvents] = useState<Event>();
   const [relatedevents, setRelatedEvents] = useState([]);
 
@@ -88,8 +88,8 @@ const EventDetails = ({ params }: { params: { id: string } }) => {
       <section className="flex justify-center bg-primary-50 bg-dotted-pattern bg-contain">
         <div className="grid grid-cols-1 md:grid-cols-2 2xl:max-w-7xl">
           <Image
-            src="/assets/images/test-2.png"
-            alt="hero image"
+            src={events?.imageUrl ?? "/test.png"}
+            alt="heroimage"
             width={1000}
             height={1000}
             className="h-full min-h-[300px] object-cover object-center"

@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-no-undef */
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -20,11 +20,10 @@ import Image from "next/image";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Checkbox } from "../ui/checkbox";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
-  username: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
   title: z.string().min(3, "Title must be at least 3 characters"),
   description: z
     .string()
@@ -34,7 +33,6 @@ const formSchema = z.object({
     .string()
     .min(3, "Location must be at least 3 characters")
     .max(400, "Location must be less than 400 characters"),
-  imageUrl: z.string().url().optional(),
   startDateTime: z.date(),
   endDateTime: z.date(),
   categoryId: z.string(),
@@ -50,13 +48,13 @@ export const EventForm = ({
   userId: string;
   type: "Create" | "Update";
 }) => {
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const router = useRouter();
   // initial values
   const initialValues = {
-    username: "",
     title: "",
     description: "",
     location: "",
-    imageUrl: "",
     startDateTime: new Date(),
     endDateTime: new Date(),
     categoryId: "",
@@ -65,20 +63,71 @@ export const EventForm = ({
     url: "",
   };
 
+  const handleImageChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    if (event.target.files && event.target.files[0]) {
+      const file = event.target.files[0];
+      setImageFile(file);
+    }
+  };
+
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: "",
+      title: "",
+      description: "",
+      location: "",
+      startDateTime: new Date(),
+      endDateTime: new Date(),
+      categoryId: "",
+      price: "",
+      isFree: false,
+      url: "",
     },
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log(values);
-  }
+    console.log("file", imageFile);
+    console.log("values", values);
+
+    if (type === "Create") {
+      // create event
+      const formData = new FormData();
+      formData.append("title", values.title);
+      formData.append("description", values.description);
+      formData.append("location", values.location);
+      formData.append("startDateTime", values.startDateTime.toString());
+      formData.append("endDateTime", values.endDateTime.toString());
+      formData.append("categoryId", "60d9fef9f9fd9c34c8dc54aa");
+      formData.append("price", values.price);
+      formData.append("isFree", values.isFree.toString());
+      formData.append("url", values.url);
+      formData.append("organizer", "60d9fef9f9fd9c34c8dc54aa");
+      formData.append("image", imageFile as Blob);
+
+      try {
+        const response = await axios.post(
+          "https://devmeets-backend.vercel.app/api/events/",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        console.log(response.data);
+        const eventId: any = response.data._id;
+        router.push(`/events/${eventId}`);
+      } catch (error: any) {
+        console.log("error==", error);
+      }
+    }
+  };
   return (
     <div>
       <Form {...form}>
@@ -100,19 +149,13 @@ export const EventForm = ({
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="imageUrl"
-              render={({ field }) => (
-                <FormItem className="w-full">
-                  <FormLabel>Event Image</FormLabel>
-                  <FormControl>
-                    <Input id="picture" type="file" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <FormItem className="w-full">
+              <FormLabel>Event Image</FormLabel>
+              <FormControl>
+                <Input id="picture" type="file" onChange={handleImageChange} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
           </div>
           <div className="flex flex-col gap-5 md:flex-row">
             <FormField
@@ -288,7 +331,14 @@ export const EventForm = ({
             />
           </div>
 
-          <Button type="submit">Submit</Button>
+          <Button
+            type="submit"
+            size="lg"
+            disabled={form.formState.isSubmitting}
+            className="w-full"
+          >
+            {form.formState.isSubmitting ? "Submitting..." : `${type} Event `}
+          </Button>
         </form>
       </Form>
     </div>
