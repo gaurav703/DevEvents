@@ -14,6 +14,8 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useTransition } from "react";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 type EventProp = {
   data: any;
@@ -67,6 +69,11 @@ const formatDateTime = (dateString: Date) => {
   };
 };
 
+interface ICategory {
+  _id: string;
+  name: string;
+}
+
 const EventList = ({
   data,
   emptyTitle,
@@ -77,6 +84,39 @@ const EventList = ({
   console.log(data.length);
   const isEventCreator = true;
   let [isPending, startTransition] = useTransition();
+
+  //category
+  const [categories, setCategories] = useState<ICategory[]>([]);
+
+  const fetchCategories = async () => {
+    try {
+      const res = await axios.get(
+        "https://devmeets-backend.vercel.app/api/categories/"
+      );
+      console.log("resss==", res.data);
+      setCategories(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  const handleDeleteEvent = async (eventId: any) => {
+    try {
+      startTransition(() => {
+        isPending = true;
+      });
+      const res = await axios.delete(
+        `https://devmeets-backend.vercel.app/api/events/${eventId}`
+      );
+      console.log("resss==", res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -92,10 +132,6 @@ const EventList = ({
                   <div className="group relative flex min-h-[380px] w-full max-w-[400px] flex-col overflow-hidden rounded-xl bg-white shadow-md transition-all hover:shadow-lg md:min-h-[438px]">
                     <Link
                       href={`/events/${event._id}`}
-                      //   style={{
-                      //     backgroundImage:
-                      //       "uri(https://res.cloudinary.com/dqki29mbg/image/upload/v1705678275/cld-sample-3.jpg)",
-                      //   }}
                       className="flex-center flex-grow bg-gray-50 bg-cover bg-center text-grey-500"
                     >
                       <Image
@@ -142,7 +178,11 @@ const EventList = ({
                             <AlertDialogFooter>
                               <AlertDialogCancel>Cancel</AlertDialogCancel>
 
-                              <AlertDialogAction>
+                              <AlertDialogAction
+                                onClick={() => {
+                                  handleDeleteEvent(event._id);
+                                }}
+                              >
                                 {isPending ? "Deleting..." : "Delete"}
                               </AlertDialogAction>
                             </AlertDialogFooter>
@@ -158,7 +198,12 @@ const EventList = ({
                             {event.isFree ? "FREE" : `$${event.price}`}
                           </span>
                           <p className="p-semibold-14 w-min rounded-full bg-grey-500/10 px-4 py-1 text-grey-500 line-clamp-1">
-                            AI
+                            {
+                              categories.find(
+                                (category) => category._id === event.categoryId
+                              )?.name
+                            }
+                            {/* {event.categoryId} */}
                           </p>
                         </div>
                       )}

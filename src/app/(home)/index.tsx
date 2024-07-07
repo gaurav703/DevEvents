@@ -1,24 +1,26 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
 import Search from "@/components/__component/Search";
 import CategoryFilter from "@/components/__component/CategoryFilter";
 import EventList from "./_component/EventList";
-import { useEffect, useState } from "react";
 import axios from "axios";
 
 export default function Home() {
   const [events, setEvents] = useState([]);
+  const [filteredEvents, setFilteredEvents] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All");
 
   const fetchEvents = async () => {
     try {
       const res = await axios.get(
         "https://devmeets-backend.vercel.app/api/events/"
       );
-      console.log("resss", res.data);
       setEvents(res.data);
+      setFilteredEvents(res.data);
     } catch (error) {
       console.log(error);
     }
@@ -27,6 +29,23 @@ export default function Home() {
   useEffect(() => {
     fetchEvents();
   }, []);
+
+  useEffect(() => {
+    const results = events.filter(
+      (event: any) =>
+        event?.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
+        (selectedCategory === "All" || event?.categoryId === selectedCategory)
+    );
+    setFilteredEvents(results);
+  }, [searchTerm, selectedCategory, events]);
+
+  const handleSearch = (term: string) => {
+    setSearchTerm(term);
+  };
+
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategory(category);
+  };
 
   return (
     <div className="min-h-screen">
@@ -63,12 +82,12 @@ export default function Home() {
         </h2>
 
         <div className="flex w-full flex-col gap-5 md:flex-row">
-          <Search />
-          <CategoryFilter />
+          <Search onSearch={handleSearch} />
+          <CategoryFilter onCategoryChange={handleCategoryChange} />
         </div>
 
         <EventList
-          data={events}
+          data={filteredEvents}
           emptyTitle="No Events Found"
           emptyStateSubtext="Come back later"
           collectionType="All_Events"

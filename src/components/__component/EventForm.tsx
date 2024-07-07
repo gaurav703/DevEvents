@@ -96,38 +96,38 @@ export const EventForm = ({
     console.log("file", imageFile);
     console.log("values", values);
 
-    // if (type === "Create") {
-    //   // create event
-    //   const formData = new FormData();
-    //   formData.append("title", values.title);
-    //   formData.append("description", values.description);
-    //   formData.append("location", values.location);
-    //   formData.append("startDateTime", values.startDateTime.toString());
-    //   formData.append("endDateTime", values.endDateTime.toString());
-    //   formData.append("categoryId", "60d9fef9f9fd9c34c8dc54aa");
-    //   formData.append("price", values.price);
-    //   formData.append("isFree", values.isFree.toString());
-    //   formData.append("url", values.url);
-    //   formData.append("organizer", "60d9fef9f9fd9c34c8dc54aa");
-    //   formData.append("image", imageFile as Blob);
+    if (type === "Create") {
+      // create event
+      const formData = new FormData();
+      formData.append("title", values.title);
+      formData.append("description", values.description);
+      formData.append("location", values.location);
+      formData.append("startDateTime", values.startDateTime.toString());
+      formData.append("endDateTime", values.endDateTime.toString());
+      formData.append("categoryId", values.categoryId);
+      formData.append("price", values.price);
+      formData.append("isFree", values.isFree.toString());
+      formData.append("url", values.url);
+      formData.append("organizer", "60d9fef9f9fd9c34c8dc54aa");
+      formData.append("image", imageFile as Blob);
 
-    //   try {
-    //     const response = await axios.post(
-    //       "https://devmeets-backend.vercel.app/api/events/",
-    //       formData,
-    //       {
-    //         headers: {
-    //           "Content-Type": "multipart/form-data",
-    //         },
-    //       }
-    //     );
-    //     console.log(response.data);
-    //     const eventId: any = response.data._id;
-    //     router.push(`/events/${eventId}`);
-    //   } catch (error: any) {
-    //     console.log("error==", error);
-    //   }
-    // }
+      try {
+        const response = await axios.post(
+          "https://devmeets-backend.vercel.app/api/events/",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        console.log(response.data);
+        const eventId: any = response.data._id;
+        router.push(`/events/${eventId}`);
+      } catch (error: any) {
+        console.log("error==", error);
+      }
+    }
   };
   return (
     <div>

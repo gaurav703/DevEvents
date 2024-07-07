@@ -7,13 +7,43 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import axios from "axios";
 
-const CategoryFilter = () => {
-  
+interface ICategory {
+  _id: string;
+  name: string;
+}
+
+const CategoryFilter = ({
+  onCategoryChange,
+}: {
+  onCategoryChange: (category: string) => void;
+}) => {
+  const [categories, setCategories] = useState<ICategory[]>([]);
+
+  const fetchCategories = async () => {
+    try {
+      const res = await axios.get(
+        "https://devmeets-backend.vercel.app/api/categories/"
+      );
+      console.log("resss==", res.data);
+      setCategories(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  const handleCategoryChange = (value: string) => {
+    onCategoryChange(value);
+  };
+
   return (
-    <Select>
+    <Select onValueChange={handleCategoryChange}>
       <SelectTrigger className="select-field">
         <SelectValue placeholder="Category" />
       </SelectTrigger>
@@ -22,15 +52,15 @@ const CategoryFilter = () => {
           All
         </SelectItem>
 
-        {/* {categories.map((category) => (
+        {categories.map((category) => (
           <SelectItem
-            value={category.name}
+            value={category._id}
             key={category._id}
             className="select-item p-regular-14"
           >
             {category.name}
           </SelectItem>
-        ))} */}
+        ))}
       </SelectContent>
     </Select>
   );
