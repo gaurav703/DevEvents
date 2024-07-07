@@ -68,19 +68,31 @@ const EventDetails = ({ params }: { params: { id: string } }) => {
 
   const fetchEvents = async () => {
     try {
+      console.log("params", params.id);
       const res = await axios.get(
-        "https://devmeets-backend.vercel.app/api/events/"
+        "https://devmeets-backend.vercel.app/api/events/" + params.id
       );
-      console.log("resss", res.data[1]);
-      setEvents(res.data[0]);
-      setRelatedEvents(res.data);
+      console.log("resss", res.data);
+      setEvents(res.data);
     } catch (error) {
-      console.log(error);
+      console.log("error in getbyid", error);
     }
   };
 
+  const fetchallEvent = async () => {
+    try {
+      const res = await axios.get(
+        "https://devmeets-backend.vercel.app/api/events/"
+      );
+      console.log("resss", res.data);
+      setRelatedEvents(res.data);
+    } catch (error: any) {
+      console.log("error in getall", error);
+    }
+  };
   useEffect(() => {
     fetchEvents();
+    fetchallEvent();
   }, []);
 
   return (
