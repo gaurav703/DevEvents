@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import axios from "axios";
 import EventList from "@/app/(home)/_component/EventList";
+import Head from "next/head";
+import Header from "@/components/__component/Header";
 
 const formatDateTime = (dateString: Date) => {
   const dateTimeOptions: Intl.DateTimeFormatOptions = {
@@ -97,6 +99,7 @@ const EventDetails = ({ params }: { params: { id: string } }) => {
 
   return (
     <>
+      <Header />
       <section className="flex justify-center bg-primary-50 bg-dotted-pattern bg-contain">
         <div className="grid grid-cols-1 md:grid-cols-2 2xl:max-w-7xl">
           <Image

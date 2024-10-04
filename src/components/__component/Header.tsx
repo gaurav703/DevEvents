@@ -1,4 +1,5 @@
 "use client";
+import { useEffect, useState } from "react"; // Import useState and useEffect
 import { usePathname } from "next/navigation";
 import React from "react";
 import Link from "next/link";
@@ -77,8 +78,24 @@ const MobileNav = () => {
 };
 
 const Header = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
+
+    // Check if both userId and token exist in localStorage
+    if (userId && token) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
+  }, []);
+
   return (
-    <footer className="border-b">
+    <header className="border-b">
+      {" "}
+      {/* Changed footer to header */}
       <div className="flex-center wrapper flex-between flex flex-col max-md:flex-row gap-4 p-5 text-center sm:flex-row">
         <Link href="/" className="text-2xl font-bold text-gray-900">
           DevEvents
@@ -93,12 +110,17 @@ const Header = () => {
             <MobileNav />
           </div>
 
-          <Button size="lg" className="max-md:hidden">
-            Login
-          </Button>
+          {/* Conditionally render the Login button based on isLoggedIn state */}
+          {!isLoggedIn && (
+            <a href="/login">
+              <Button size="lg" className="max-md:hidden">
+                Login
+              </Button>
+            </a>
+          )}
         </div>
       </div>
-    </footer>
+    </header>
   );
 };
 
