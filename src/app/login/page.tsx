@@ -42,13 +42,12 @@ export default function Login() {
       if (rememberMe) {
         localStorage.setItem("token", data.token);
         localStorage.setItem("userId", JSON.stringify(data.userId));
+        console.log("Token and userId stored in localStorage");
       }
 
       console.log(data);
       console.log(data.userId);
       router.push("/");
-
-      alert("Login successful");
     } catch (error) {
       console.log(error);
     }

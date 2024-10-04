@@ -1,21 +1,44 @@
 "use client";
 import { useState } from "react";
+import axios from "axios"; // Import Axios
+import { useRouter } from "next/navigation";
 
 export default function Register() {
   const [email, setEmail] = useState("");
+  const [username, setUsername] = useState(""); // Add username state
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+
+  const router = useRouter();
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
 
-    // Registration logic here
+    // Check if passwords match
     if (password !== confirmPassword) {
       alert("Passwords do not match");
       return;
     }
 
-    // Handle successful registration (API call, redirect, etc.)
+    // Registration logic here (e.g., API call using Axios)
+    try {
+      const response = await axios.post(
+        "https://devmeets-backend.vercel.app/api/users/signup",
+        {
+          email,
+          username,
+          password,
+          firstName: username, // Adjust as needed
+          lastName: "kamble", // You might want to get this from a user input
+        }
+      );
+
+      router.push("/login");
+      alert("Registration successful. Please log in.");
+    } catch (error) {
+      console.error("Error during registration:", error);
+      alert("An error occurred. Please try again.");
+    }
   };
 
   return (
@@ -37,6 +60,23 @@ export default function Register() {
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              required
+              className="w-full px-3 py-2 mt-1 text-gray-900 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            />
+          </div>
+
+          <div>
+            <label
+              htmlFor="username"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Username
+            </label>
+            <input
+              type="text"
+              id="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               required
               className="w-full px-3 py-2 mt-1 text-gray-900 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             />
