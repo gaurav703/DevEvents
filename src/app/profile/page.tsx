@@ -20,6 +20,15 @@ export default function Page() {
     }
   }, []);
 
+  const handleLogout = () => {
+    // Clear localStorage and reset state
+    localStorage.removeItem("token");
+    localStorage.removeItem("userId");
+    setToken("");
+    setUserId("");
+    alert("You have been logged out."); // Optional: Display a message to the user
+  };
+
   return (
     <>
       <Header />
@@ -33,6 +42,14 @@ export default function Page() {
             <strong>User ID:</strong> {userId || "No user ID found"}
           </p>
         </div>
+        {token && (
+          <button
+            onClick={handleLogout}
+            className="mt-6 px-4 py-2 font-medium text-white bg-red-600 rounded-md hover:bg-red-700"
+          >
+            Logout
+          </button>
+        )}
       </div>
     </>
   );
