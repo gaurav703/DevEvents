@@ -15,7 +15,8 @@ import {
 import Image from "next/image";
 import { Separator } from "../ui/separator";
 
-const NavItems = () => {
+// NavItems component now accepts isLoggedIn as a prop
+const NavItems = ({ isLoggedIn }: any) => {
   const pathname = usePathname();
   const headerLinks = [
     {
@@ -26,10 +27,15 @@ const NavItems = () => {
       label: "Create Event",
       route: "/events/CreateEvents",
     },
-    {
-      label: "My Profile",
-      route: "/profile",
-    },
+    // Conditionally add the "My Profile" link if the user is logged in
+    ...(isLoggedIn
+      ? [
+          {
+            label: "My Profile",
+            route: "/profile",
+          },
+        ]
+      : []),
   ];
 
   return (
@@ -52,7 +58,7 @@ const NavItems = () => {
   );
 };
 
-const MobileNav = () => {
+const MobileNav = ({ isLoggedIn }: any) => {
   return (
     <nav className="md:hidden">
       <Sheet>
@@ -70,7 +76,7 @@ const MobileNav = () => {
             DevEvents
           </Link>
           <Separator className="border border-gray-50" />
-          <NavItems />
+          <NavItems isLoggedIn={isLoggedIn} />
         </SheetContent>
       </Sheet>
     </nav>
@@ -81,10 +87,12 @@ const Header = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    const userId = localStorage.getItem("userId");
-    const token = localStorage.getItem("token");
+    // Check both localStorage and sessionStorage for userId and token
+    const userId =
+      localStorage.getItem("userId") || sessionStorage.getItem("userId");
+    const token =
+      localStorage.getItem("token") || sessionStorage.getItem("token");
 
-    // Check if both userId and token exist in localStorage
     if (userId && token) {
       setIsLoggedIn(true);
     } else {
@@ -102,12 +110,12 @@ const Header = () => {
         </Link>
 
         <nav className="hidden md:flex">
-          <NavItems />
+          <NavItems isLoggedIn={isLoggedIn} />
         </nav>
 
         <div className="flex items-center space-x-4">
           <div className="md:hidden">
-            <MobileNav />
+            <MobileNav isLoggedIn={isLoggedIn} />
           </div>
 
           {/* Conditionally render the Login button based on isLoggedIn state */}

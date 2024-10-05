@@ -38,15 +38,18 @@ export default function Login() {
         return;
       }
 
-      // Store token and userId in localStorage only if rememberMe is checked
+      // Store token and userId in localStorage or sessionStorage based on rememberMe
       if (rememberMe) {
         localStorage.setItem("token", data.token);
         localStorage.setItem("userId", JSON.stringify(data.userId));
         console.log("Token and userId stored in localStorage");
+      } else {
+        sessionStorage.setItem("token", data.token);
+        sessionStorage.setItem("userId", JSON.stringify(data.userId));
+        console.log("Token and userId stored in sessionStorage");
       }
 
       console.log(data);
-      console.log(data.userId);
       router.push("/");
     } catch (error) {
       console.log(error);

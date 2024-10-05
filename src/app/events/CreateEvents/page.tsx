@@ -16,20 +16,22 @@ const CreateEvents = () => {
   const [userId, setUserId] = useState("");
 
   useEffect(() => {
-    // Get the token and userId from localStorage
-    const storedToken = localStorage.getItem("token");
-    const storedUserId = localStorage.getItem("userId");
+    // Get the token and userId from both localStorage and sessionStorage
+    const storedToken =
+      localStorage.getItem("token") || sessionStorage.getItem("token");
+    const storedUserId =
+      localStorage.getItem("userId") || sessionStorage.getItem("userId");
 
     if (storedToken) {
       setToken(storedToken);
       setIsLoggedIn(true);
-      console.log("Token found in localStorage");
+      console.log("Token found in storage");
     }
 
     if (storedUserId) {
       setUserId(JSON.parse(storedUserId));
       setIsLoggedIn(true);
-      console.log("UserId found in localStorage");
+      console.log("UserId found in storage");
     }
   }, []);
 
